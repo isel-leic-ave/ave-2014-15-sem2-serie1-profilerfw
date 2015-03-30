@@ -48,6 +48,7 @@
     <Compile Include="InstructionParser.cs" />
     <Compile Include="Profiler.cs" />
     <Compile Include="ProfilerCounter.cs" />
+    <Compile Include="ProfilerCounterInstrType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

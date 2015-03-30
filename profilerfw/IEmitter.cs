@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace profilerfw
 {
-    interface IEmitter
+    public interface IEmitter
     {
         void Emit(Instruction instr, ILGenerator destMethod);
     }

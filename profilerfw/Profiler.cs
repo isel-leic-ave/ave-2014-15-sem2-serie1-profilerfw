@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace profilerfw
 {
-    class Profiler
+    public class Profiler
     {
 
         private const string ASSEMBLY_PREFIX = "Instr";
@@ -33,7 +33,7 @@ namespace profilerfw
             //
             string asmName = ASSEMBLY_PREFIX + src.Name;
             ModuleBuilder mb;
-            AssemblyBuilder asmBuilder = CreateAsmBuilder(asmName, out mb);
+            AssemblyBuilder asmBuilder = CreateAsmBuilderExe(asmName, out mb);
             // 
             // Create Type Builder
             //
@@ -51,7 +51,17 @@ namespace profilerfw
             asmBuilder.Save(asmName + ".exe");
         }
 
-        private AssemblyBuilder CreateAsmBuilder(string name, out ModuleBuilder mb)
+        public static AssemblyBuilder CreateAsmBuilderExe(string name, out ModuleBuilder mb)
+        {
+            return CreateAsmBuilder(name, out mb, ".exe");
+        }
+
+        public static AssemblyBuilder CreateAsmBuilderDll(string name, out ModuleBuilder mb)
+        {
+            return CreateAsmBuilder(name, out mb, ".dll");
+        }
+
+        private static AssemblyBuilder CreateAsmBuilder(string name, out ModuleBuilder mb, string suffix)
         {
             AssemblyName asmName = new AssemblyName(name);
             AssemblyBuilder asmBuilder =
@@ -62,11 +72,11 @@ namespace profilerfw
             // For a single-module assembly, the module name is usually 
             // the assembly name plus an extension.
             //
-            mb = asmBuilder.DefineDynamicModule(asmName.Name, asmName.Name + ".exe");
+            mb = asmBuilder.DefineDynamicModule(asmName.Name, asmName.Name + suffix);
             return asmBuilder;
         }
 
-        private MethodBuilder EmitEntryMethod(MethodInfo srcMethod, TypeBuilder tb)
+        public MethodBuilder EmitEntryMethod(MethodInfo srcMethod, TypeBuilder tb)
         {
             //
             // Emit Method
@@ -108,6 +118,11 @@ namespace profilerfw
             ctor1IL.Emit(OpCodes.Ldarg_0);
             ctor1IL.Emit(OpCodes.Call, typeof(object).GetConstructor(Type.EmptyTypes));
             ctor1IL.Emit(OpCodes.Ret);
+        }
+
+        internal void ReplaceEmmitter(Type type, IEmitter emitter)
+        {
+            instrParser.ReplaceEmmitter(type, emitter);
         }
     }
 }

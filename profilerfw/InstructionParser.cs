@@ -35,15 +35,22 @@ namespace profilerfw
             emitters.Add(typeof(String), new EmitterString());
             emitters.Add(typeof(Type), new EmitterType());
         }
-        
+
+        public void ReplaceEmmitter(Type operandType, IEmitter value)
+        {
+            emitters[operandType] = value;
+        }
+
         internal void CopyTo(Instruction instr, ILGenerator destMethod)
         {
             Type operandType = instr.Operand == null ? typeof(EmptyKey) : instr.Operand.GetType();
-            emitters
-                .Where(p => p.Key.IsAssignableFrom(operandType))
-                .First()
-                .Value
-                .Emit(instr, destMethod);
+            foreach (var item in emitters)
+            {
+                if (item.Key.IsAssignableFrom(operandType)) { 
+                    item.Value.Emit(instr, destMethod);
+                    break;
+                }
+            }
         }
 
         private class EmitterNoArgs : IEmitter
