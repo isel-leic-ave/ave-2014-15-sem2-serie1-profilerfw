@@ -1,5 +1,7 @@
 ## guião da parte 2 da da primeira série de exercícios
 
+![profilerfw diagram](profilerfw.jpg)
+
 ###Estrutura##
 
 Evitar a repetição de código entre as classes Profiler e ProfilerCounter. Neste sentido poderão adicionar/mudar assinaturas de métodos ou campos para conseguir a melhor integração entre os dois tipos:
